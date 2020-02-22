@@ -48,8 +48,6 @@ describe('Outlook P0 scenarios',() => {
     //    
     })
 
-   
-
     it('Should Filter Email', async() => {
         await page.waitForSelector('div[aria-label*="Filter"]');
         await page.click('div[aria-label*="Filter"]');
@@ -101,6 +99,55 @@ describe('Outlook P0 scenarios',() => {
         await page.keyboard.press('Enter');
         await page.click('//*[@id="app"]/div/div/main/div/div/div[2]/div/article');
         
+    })
+
+    it('should mark an email as junk',async() => {
+        await page.click('//*[@id="app"]/div/div/main/div/div/div[7]/div/article');
+        await page.waitForSelector('i[aria-label*="More options"]');
+        await page.click('i[aria-label*="More options"]');
+        await page.waitForSelector('div[aria-label*="Mark as junk"]');
+        await page.click('div[aria-label*="Mark as junk"]');
+    })
+
+    it('should pin and reply the mail', async() => {
+        await page.click('//*[@id="app"]/div/div/main/div/div/div[8]/div/article');
+        await page.waitForSelector('i[aria-label*="More options"]');
+        await page.click('i[aria-label*="More options"]');
+        await page.waitForSelector('div[aria-label*="Pin"]');
+        await page.click('div[aria-label*="Pin"]');
+        await page.waitFor(3000);
+        await page.click('//*[@id="app"]/div/div/main/div/div/div[8]/div/article');
+        await page.click('i[aria-label*="Reply"]');
+        await page.click('div[aria-label*="Message: "]');
+        await page.type('div[aria-label*="Message: "]',"test message");
+        await page.click('i[aria-label*="Send"]');
+    })
+
+    it('should flag/unflag the mail', async() => {
+        await page.click('//*[@id="app"]/div/div/main/div/div/div[7]/div/article');
+        await page.waitForSelector('i[aria-label*="More options"]');
+        await page.click('i[aria-label*="More options"]');
+        await page.waitForSelector('div[aria-label*="Flag"]');
+        await page.click('div[aria-label*="Flag"]');
+    })
+
+    it('should navigate to other folder', async() => {
+        await page.waitForSelector('i[aria-label*="Folder navigation"]');
+        await page.click('i[aria-label*="Folder navigation"]');
+        await page.waitForSelector('//*[@id="FolderPaneDivId"]/div[2]/div[2]/div[4]');
+        await page.click('//*[@id="FolderPaneDivId"]/div[2]/div[2]/div[4]');
+    })
+
+    it('should delete emails in the deleted folder permanently', async() => {
+        await page.waitForSelector('i[aria-label*="Folder navigation"]');
+        await page.click('i[aria-label*="Folder navigation"]');
+        await page.click('//*[@id="FolderPaneDivId"]/div[2]/div[3]/div[6]');
+        await page.waitForSelector('//*[@id="app"]/div/div/main/div/div/div[2]/div/article');
+        await page.click('//*[@id="app"]/div/div/main/div/div/div[2]/div/article');
+        await page.waitForSelector('i[aria-label*="Delete"]');
+        await page.click('i[aria-label*="Delete"]');
+        await page.waitForSelector('button[aria-label*="OK"]');
+        await page.click('button[aria-label*="OK"]');
     })
     
 })

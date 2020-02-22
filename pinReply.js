@@ -20,23 +20,18 @@ const pixel2 = devices['Pixel 2'];
   await page.waitFor(2000);
   await page.click('span#submitButton');
 
-  // await page.waitForSelector('div[aria-label*="Filter"]');
-  // await page.click('div[aria-label*="Filter"]');
 
-  // await page.click('i[aria-label*="Search"]');
-  //       await page.type('input[type*="Search"]',"Vaibhav");
-  //       await page.keyboard.press('Enter');
-  //       await page.click('//*[@id="app"]/div/div/main/div/div/div[2]/div/article');
-  //       await page.goto('https://outlook-sdf.office.com/mail/inbox?features=-mini-serviceworker');
-  
-    
-
-
-
-
-
-
- 
-
-  //await browser.close();
+  //open an email and pin it and again open it to reply the mail
+  await page.click('//*[@id="app"]/div/div/main/div/div/div[8]/div/article');
+  await page.waitForSelector('i[aria-label*="More options"]');
+  await page.click('i[aria-label*="More options"]');
+  await page.waitForSelector('div[aria-label*="Pin"]');
+  await page.click('div[aria-label*="Pin"]');
+  await page.waitFor(3000);
+  await page.click('//*[@id="app"]/div/div/main/div/div/div[8]/div/article');
+  await page.click('i[aria-label*="Reply"]');
+  await page.click('div[aria-label*="Message: "]');
+  await page.type('div[aria-label*="Message: "]',"test message");
+  await page.click('i[aria-label*="Send"]');
+  await browser.close();
 })();
