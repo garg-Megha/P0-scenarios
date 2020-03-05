@@ -1,6 +1,6 @@
-const {swipeLeft} = require('./swipe');
-
-    const {webkit,chromium, devices} = require('playwright');
+const {pinch} = require('./pinch');
+const {mobileConfig} = require('./mobileConfig');
+const {webkit,chromium, devices} = require('playwright');
     const pixel2 = devices['Pixel 2'];
     (async () => {
       const browser = await chromium.launch({headless:false});
@@ -40,9 +40,6 @@ const {swipeLeft} = require('./swipe');
 
      
       //await swipe(client, {x, y}, {x:x, y:y-200});
-      await swipeLeft(page,client, '#app > div > div > main > div > div > div:nth-child(3) > div > article h2', 200);
-      await client.send('Emulation.setEmitTouchEventsForMouse', {
-        enabled:true,
-        configuration:'mobile'
-    });
+      await pinch(page,client, '#app > div > div > main > div > div > div:nth-child(3) > div > article h2','#app > div > div > main > div > div > div:nth-child(5) > div > article h2' ,200);
+      await mobileConfig(client);
 })();

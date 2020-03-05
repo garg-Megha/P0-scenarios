@@ -1,15 +1,7 @@
+const {swipeLeft,scroll} = require('../swipe');
+const {mobileConfig} = require('../mobileConfig');
 const PAGE_URL = 'https://outlook-sdf.office.com/mail/inbox?features=-mini-serviceworker';
-const dispatchTouch = async(client,type,touchPoints) => {
-    await client.send('Input.dispatchTouchEvent',{type,touchPoints});
-}
 
-const getCenter = function(id) {
-    const node = document.querySelector(id);
-    console.log('hiiii' );
-    console.log( node.offsetLeft + node.offsetWidth / 2);
-    return { x: node.offsetLeft + node.offsetWidth / 2,
-             y: node.offsetTop + node.offsetHeight / 2 }
-}
 
 describe('Outlook P0 scenarios',() => {
     jest.setTimeout(4000000);
@@ -45,10 +37,7 @@ describe('Outlook P0 scenarios',() => {
         //         scale:1
         //     }
         // });
-        await client.send('Emulation.setEmitTouchEventsForMouse', {
-           enabled:true,
-           configuration:'mobile'
-        });
+        await mobileConfig(client);
         
         await page.waitForSelector('input[id*="i0116"]');
         await page.type('input[id*="i0116"]', "owaexp6@microsoft.com");
@@ -63,19 +52,14 @@ describe('Outlook P0 scenarios',() => {
     
     it('should swipe the mail',async() => {
         await page.waitFor(5000);
-        await page.keyboard.down('Shift');
-        await page.keyboard.down('Control');
-        await page.keyboard.down('i');
-        await page.keyboard.up('i');
-        await page.keyboard.up('Shift');
-        await page.keyboard.up('Control');
-        const { x, y } = await page.evaluate(getCenter,'#app > div > div > main > div > div > div:nth-child(3) > div > article');
-        console.log(x);
-        //await page.mouse.click(x,y);
-      
-        await dispatchTouch(client,'touchStart',[{x,y}]);
-        await dispatchTouch(client,'touchMove',[{x:x-1,y}]);
-        await dispatchTouch(client,'touchEnd',[]);
+        await swipeLeft(page,client, '#app > div > div > main > div > div > div:nth-child(3) > div > article h2', 200);
+        await mobileConfig(client);
     });
+
+    it('should scroll the mail list', async() => {
+        await page.waitFor(2000);
+        await scroll(page,client, '#app > div > div > main > div > div > div:nth-child(4) > div > article h2', 200);
+        await mobileConfig(client);
+    })
 })
 

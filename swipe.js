@@ -1,3 +1,5 @@
+const {getBoundingRect} = require('./getBoundingRect');
+
 /**
    * @param {!{x?: number, y?: number}=} start
    * @param {!{x?: number, y?: number}=} end
@@ -11,11 +13,11 @@
     // Touches appear to be lost during the first frame after navigation.
     // This waits a frame before sending the tap.
     // @see https://crbug.com/613219
-    // await client.send("Runtime.evaluate", {
-    //   expression:
-    //     "new Promise(x => requestAnimationFrame(() => requestAnimationFrame(x)))",
-    //   awaitPromise: true
-    // });
+    await client.send("Runtime.evaluate", {
+      expression:
+        "new Promise(x => requestAnimationFrame(() => requestAnimationFrame(x)))",
+      awaitPromise: true
+    });
 
     await client.send("Input.dispatchTouchEvent", {
       type: "touchStart",
@@ -40,23 +42,23 @@
     });
   }  
 
-  const getBoundingRect = function (selector) {
-    const rect =  document.querySelector(selector).getBoundingClientRect();
-    return{
-      x: rect.left,
-      y: rect.top,
-      width: rect.width,
-      height: rect.height
-      };
-  }
   
-   const swipeLeft = async (page,client, selector, offset) => {
-      const targetBox = await page.evaluate(getBoundingRect,selector);
-      const { x, y } = targetBox || {};
-      return swipe(client, {x: x + offset, y}, {x, y});
+  
+  const swipeLeft = async (page,client, selector, offset) => {
+    const targetBox = await page.evaluate(getBoundingRect,selector);
+    const { x, y } = targetBox || {};
+    return swipe(client, {x: x + offset, y}, {x, y});
   }
 
 
-  module.exports={
-      swipeLeft
-  }
+
+const scroll =  async (page,client, selector, offset) => {
+  const targetBox = await page.evaluate(getBoundingRect,selector);
+  const { x, y } = targetBox || {};
+  return swipe(client, {x,y:y+ offset}, {x, y});
+}
+
+module.exports = {
+  swipeLeft,
+  scroll
+}
