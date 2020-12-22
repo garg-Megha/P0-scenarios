@@ -168,7 +168,7 @@
     "node-modules-regexp": "^1.0.0",
     "node-int64": "^0.4.0",
     "nice-try": "^1.0.5",
-    "node-notifier": "^6.0.0",
+    "node-notifier": "^8.0.1",
     "normalize-path": "^3.0.0",
     "npm-run-path": "^2.0.2",
     "nwsapi": "^2.2.0",
